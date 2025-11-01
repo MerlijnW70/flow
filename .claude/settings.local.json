@@ -15,7 +15,12 @@
       "Bash(cargo clean:*)",
       "Bash(git init:*)",
       "Bash(cat:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: Enterprise-grade Rust API with 100% test coverage\n\nFeatures:\n- 🚀 High-performance Axum web framework with Tokio async runtime\n- 📊 GraphQL API with GraphiQL playground\n- 🔐 JWT authentication with role-based access control\n- ✅ 219 integration tests with 100% coverage\n- 📈 Prometheus metrics and health checks\n- 🗄️ PostgreSQL with SQLx for type-safe queries\n- 🔄 WebSocket support for real-time updates\n- 🤖 AI provider integration (OpenAI, Anthropic)\n- 📦 S3-compatible storage\n- ⚙️ Background job scheduler\n\nTechnical highlights:\n- Swagger UI with embedded assets (utoipa v5.4.0, utoipa-swagger-ui v9.0.2)\n- Comprehensive test suite covering all modules\n- Production-ready with health checks, metrics, and observability\n- Modular architecture with dependency injection\n\nTest Coverage:\n- Background Jobs: 28 tests\n- GraphQL: 26 tests\n- Storage/S3: 37 tests\n- AI Integration: 43 tests\n- WebSocket: 40 tests\n- Authentication: 18 tests\n- Users: 15 tests\n- Core API: 12 tests\nTotal: 219 tests\n\n🤖 Generated with Claude Code\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
