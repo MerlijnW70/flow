@@ -20,7 +20,14 @@
       "Bash(git remote add:*)",
       "Bash(git branch:*)",
       "Bash(git push:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npm install:*)",
+      "Bash(railway:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(railway login:*)",
+      "Bash(powershell -Command \"[Convert]::ToBase64String((1..48 | ForEach-Object { Get-Random -Maximum 256 }))\")",
+      "Bash(cargo update:*)"
     ],
     "deny": [],
     "ask": []
