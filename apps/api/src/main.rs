@@ -1,4 +1,5 @@
 use axum::{routing::get, Router};
+use sqlx::postgres::PgPoolOptions;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 use vibe_api::{metrics, modules};
@@ -26,30 +27,47 @@ async fn main() {
     // Initialize metrics
     let _prometheus_handle = metrics::init_metrics();
 
-    // For now, create routes without database
-    // In production, you would:
-    // 1. Load config from .env
-    // 2. Create database pool
-    // 3. Pass pool to routes that need it
+    // Get database URL from environment
+    let database_url = std::env::var("DATABASE_URL")
+        .expect("DATABASE_URL must be set");
+
+    // Create database pool
+    let db_pool = PgPoolOptions::new()
+        .max_connections(5)
+        .connect(&database_url)
+        .await
+        .expect("Failed to connect to database");
+
+    println!("✅ Connected to database");
+
+    // Run migrations
+    sqlx::migrate!("./migrations")
+        .run(&db_pool)
+        .await
+        .expect("Failed to run migrations");
+
+    println!("✅ Migrations completed");
 
     let app = Router::new()
         .route("/hello", get(hello))
         .merge(metrics::routes())
-        // Health routes require database - placeholder for now
-        // .merge(modules::health::routes(db_pool.clone()))
-        // GraphQL requires database - placeholder for now
-        // .merge(modules::graphql::routes(modules::graphql::build_schema(db_pool)))
+        .merge(modules::health::routes(db_pool.clone()))
         .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()));
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
+    // Use PORT from environment (Railway provides this) or default to 3000
+    let port = std::env::var("PORT")
+        .unwrap_or_else(|_| "3000".to_string());
+
+    let bind_addr = format!("0.0.0.0:{}", port);
+    let listener = tokio::net::TcpListener::bind(&bind_addr)
         .await
         .unwrap();
 
-    println!("🚀 Server running at http://localhost:3000/swagger-ui");
-    println!("📊 Metrics available at http://localhost:3000/metrics");
-    println!("💚 Health check at http://localhost:3000/health");
-    println!("✅ Readiness check at http://localhost:3000/ready");
-    println!("\nNote: GraphQL and database-dependent endpoints require database setup");
+    println!("🚀 Server running on port {}", port);
+    println!("📊 Metrics available at /metrics");
+    println!("💚 Health check at /health");
+    println!("✅ Readiness check at /ready");
+    println!("📖 Swagger UI at /swagger-ui");
 
     axum::serve(listener, app)
         .await
