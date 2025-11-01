@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cargo test:*)",
+      "Bash(cargo build:*)",
+      "Bash(cmake:*)",
+      "Bash(nasm:*)",
+      "Bash(rustup:*)",
+      "Bash(cargo run)",
+      "Bash(cargo tree:*)",
+      "Bash(find:*)",
+      "Bash(timeout 90 cargo test:*)",
+      "Bash(timeout 60 cargo test:*)",
+      "Bash(curl:*)",
+      "Bash(cargo clean:*)",
+      "Bash(git init:*)",
+      "Bash(cat:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

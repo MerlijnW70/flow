@@ -1,0 +1,29 @@
+﻿[workspace]
+resolver = "2"
+members = ["apps/api"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Vibe API Team"]
+license = "MIT"
+repository = "https://github.com/yourusername/vibe-api"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+strip = true
+
+[profile.dev]
+opt-level = 0
+debug = true
+
+[profile.test]
+opt-level = 0
+
+# ✅ Use the local offline crate instead of crates.io
+# NOTE: Patch disabled to use official crate with embedded Swagger UI assets
+
+# [patch.crates-io]
+# utoipa-swagger-ui = { path = "crates/utoipa-swagger-ui" }

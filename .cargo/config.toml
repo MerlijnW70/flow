@@ -1,0 +1,10 @@
+﻿[build]
+target-dir = "C:\\cargo_tmp"
+
+[target.x86_64-pc-windows-msvc]
+linker = "rust-lld.exe"
+rustflags = ["-C", "link-arg=/INCREMENTAL:NO"]
+
+[env]
+SWAGGER_UI_OFFLINE = "true"
+SWAGGER_UI_DOWNLOAD_USE_REQWEST = "true"
