@@ -1,7 +1,7 @@
 # Multi-stage Dockerfile for optimized production build
 
 # Stage 1: Builder
-FROM rust:1.82-slim as builder
+FROM rust:1.83-slim as builder
 
 WORKDIR /app
 
