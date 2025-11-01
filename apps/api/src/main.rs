@@ -28,19 +28,32 @@ async fn main() {
     let _prometheus_handle = metrics::init_metrics();
 
     // Get database URL from environment
-    let database_url = std::env::var("DATABASE_URL")
-        .expect("DATABASE_URL must be set");
+    // Try DATABASE_PUBLIC_URL first (Railway proxy), then fall back to DATABASE_URL
+    let database_url = std::env::var("DATABASE_PUBLIC_URL")
+        .or_else(|_| std::env::var("DATABASE_URL"))
+        .expect("DATABASE_URL or DATABASE_PUBLIC_URL must be set");
 
-    // Create database pool
+    println!("🔗 Connecting to database...");
+
+    // Create database pool with increased timeout and retry settings
     let db_pool = PgPoolOptions::new()
         .max_connections(5)
+        .min_connections(1)
+        .acquire_timeout(std::time::Duration::from_secs(30))
+        .connect_timeout(std::time::Duration::from_secs(30))
+        .idle_timeout(std::time::Duration::from_secs(300))
         .connect(&database_url)
         .await
-        .expect("Failed to connect to database");
+        .unwrap_or_else(|e| {
+            eprintln!("❌ Failed to connect to database: {}", e);
+            eprintln!("Database URL format: postgresql://user:pass@host:port/db");
+            panic!("Database connection failed");
+        });
 
     println!("✅ Connected to database");
 
     // Run migrations
+    println!("🔄 Running database migrations...");
     sqlx::migrate!("./migrations")
         .run(&db_pool)
         .await
