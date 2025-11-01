@@ -1,4 +1,4 @@
-# vibe-api
+# Flow
 
 > **Enterprise-grade Rust backend following 2025 best practices**
 
